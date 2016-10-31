@@ -35,11 +35,9 @@ EOF
 
 sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc diana-dev -join 10.4.102.52
 
-# Install dnsmasq
-sudo yum install dnsmasq
+# Setup dnsmasq
 sudo sh -c "echo 'server=/consul/127.0.0.1#8600' >> /etc/dnsmasq.conf"
 sudo sh -c "echo 'strict-order' >> /etc/dnsmasq.conf"
-# TODO ここなんとかする
-# sudo sh -c "echo 'nameserver 127.0.0.1' >> /etc/resolv.conf"
+sudo sed -i -e "/^search.*$/a nameserver 127.0.0.1" /etc/resolv.conf
 sudo systemctl enable dnsmasq.service
 sudo systemctl start dnsmasq.service
