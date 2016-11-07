@@ -4,10 +4,6 @@
 # Bootstrap action for Sahara clusters
 ###########################################
 
-sudo cat <<EOF > /tsukamoto.txt
-1 = $1
-EOF
-
 # Install consul
 sudo mkdir -p /opt/consul/etc
 sudo mkdir -p /opt/consul/bin
