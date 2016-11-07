@@ -4,6 +4,11 @@
 # Bootstrap action for Sahara clusters
 ###########################################
 
+# Usage
+# bootstrap:https://raw.githubusercontent.com/CyberAgent/adtech-ganesha-public/master/bootstrap_action.sh bootstrap_args:${acl_access_token},${consul_dc_name},${consul_server_ipv4}
+# e.g. consul_dc_name=diana-dev
+# e.g. consul_server_ipv4=10.x.x.x
+
 # Install consul
 sudo mkdir -p /opt/consul/etc
 sudo mkdir -p /opt/consul/bin
@@ -29,7 +34,7 @@ sudo cat <<EOF > /opt/consul/etc/acl_token.json
 {"acl_token":"$1"}
 EOF
 
-sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc diana-dev -join 10.4.102.52
+sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc $2 -join $3
 
 # Setup dnsmasq
 sudo sh -c "echo 'server=/consul/127.0.0.1#8600' >> /etc/dnsmasq.conf"
