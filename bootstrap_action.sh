@@ -30,7 +30,7 @@ sudo cat <<EOF > /opt/consul/etc/consul.json
 }
 EOF
 sudo cat <<EOF > /opt/consul/etc/acl_token.json
-'{"acl_token":"$1"}'
+{"acl_token":"$1"}
 EOF
 
 sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc diana-dev -join 10.4.102.52
