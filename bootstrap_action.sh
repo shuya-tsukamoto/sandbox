@@ -30,11 +30,31 @@ sudo cat <<EOF > /opt/consul/etc/consul.json
   }
 }
 EOF
+
 sudo cat <<EOF > /opt/consul/etc/acl_token.json
 {"acl_token":"$1"}
 EOF
 
-sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc $2 -join $3 &
+sudo cat <<EOF | sudo tee /etc/systemd/system/consul.service
+[Unit]
+Description=consul agent
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Environment=GOMAXPROCS=2
+Restart=on-failure
+ExecStart=/opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc $2 -join $3
+ExecReload=/bin/kill -HUP \$MAINPID
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable consul
+sudo systemctl start consul
 
 # Setup dnsmasq
 sudo sh -c "echo 'server=/consul/127.0.0.1#8600' >> /etc/dnsmasq.conf"
