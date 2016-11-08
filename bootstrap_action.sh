@@ -34,7 +34,7 @@ sudo cat <<EOF > /opt/consul/etc/acl_token.json
 {"acl_token":"$1"}
 EOF
 
-sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc $2 -join $3
+sudo /opt/consul/bin/consul agent -config-dir=/opt/consul/etc -dc $2 -join $3 &
 
 # Setup dnsmasq
 sudo sh -c "echo 'server=/consul/127.0.0.1#8600' >> /etc/dnsmasq.conf"
